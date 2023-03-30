@@ -1,5 +1,7 @@
 import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
 
+const BASE_URL = "https://factoryfolio.deno.dev";
+
 async function handleRequest(request: Request): Promise<Response> {
   const { pathname, searchParams } = new URL(request.url);
 
@@ -15,7 +17,7 @@ async function handleRequest(request: Request): Promise<Response> {
             <p>Devfolio → FactoryDAO export. The output is in CSV format.</p>
             <h2>Usage</h2>
             <p>
-                Just go to url <code>/&lt;HackathonSlug&gt;</code>
+                Just go to url <code>${BASE_URL}/&lt;HackathonSlug&gt;</code>
             </p>
             <h2>Examples</h2>
             <ul>
@@ -55,12 +57,12 @@ async function handleRequest(request: Request): Promise<Response> {
   const separator = ",";
 
   const output = [["project_name", "project_tagline"].map(col).join(separator)];
-  const list = data.hits.hits || []
+  const list = data.hits.hits || [];
 
-  if (searchParams.get('stats') !== null) {
+  if (searchParams.get("stats") !== null) {
     return new Response(JSON.stringify({
-        projects_count: list.length
-    }))
+      projects_count: list.length,
+    }));
   }
 
   for (const hit of list) {
