@@ -9,7 +9,7 @@ async function handleRequest(request: Request): Promise<Response> {
     return new Response(
       `<html>
         <head>
-            <title></title>
+            <title>FactoryFolio</title>
             <link rel="stylesheet" href="style.css" />
         </head>
         <body>
