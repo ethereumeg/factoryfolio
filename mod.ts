@@ -14,7 +14,7 @@ async function handleRequest(request: Request): Promise<Response> {
         </head>
         <body>
             <h1>FactoryFolio</h1>
-            <p>Devfolio → FactoryDAO export. The output is in CSV format.</p>
+            <p>Devfolio → FactoryDAO export. The script downloads all projects from a given hackathon and formats them as a CSV ready for import into FactoryDAO.</p>
             <h2>Usage</h2>
             <p>
                 Just go to url <code>${BASE_URL}/&lt;HackathonSlug&gt;</code>
@@ -67,7 +67,8 @@ async function handleRequest(request: Request): Promise<Response> {
 
   for (const hit of list) {
     const item = hit._source;
-    output.push([item.name, item.tagline].map(col).join(separator));
+    const url = `https://devfolio.co/projects/${item.slug}`
+    output.push([item.name, item.tagline+" "+url].map(col).join(separator));
   }
 
   return new Response(output.join("\n"), {
