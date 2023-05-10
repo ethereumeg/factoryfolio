@@ -15,6 +15,9 @@ async function handleRequest(request: Request): Promise<Response> {
         <body>
             <h1>FactoryFolio</h1>
             <p>Devfolio → FactoryDAO export. The script downloads all projects from a given hackathon and formats them as a CSV ready for import into FactoryDAO.</p>
+            <p>
+            CSV file:<i>Project Name, Tagline, Description, Links, Cover img, Members, Project URL</i>
+            </p>
             <h2>Usage</h2>
             <p>
                 Just go to url <code>${BASE_URL}/&lt;HackathonSlug&gt;</code>
@@ -53,10 +56,10 @@ async function handleRequest(request: Request): Promise<Response> {
     }),
   });
   const data = await req.json();
-  const col = (val) => `"${val.replace(/"/g, '\\"').replace(/\n/g, "\\n")}"`;
+  const col = (val) => val ? `"${val.replace(/"/g, '""').replace(/,/g, ',')}"` : '""';
   const separator = ",";
 
-  const output = [["project_name", "project_tagline"].map(col).join(separator)];
+  const output = [["Project Name", "Tagline", "Description", "Links", "Cover img", "Members", "URL"].map(col).join(separator)];
   const list = data.hits.hits || [];
 
   if (searchParams.get("stats") !== null) {
@@ -67,8 +70,16 @@ async function handleRequest(request: Request): Promise<Response> {
 
   for (const hit of list) {
     const item = hit._source;
-    const url = `https://devfolio.co/projects/${item.slug}`
-    output.push([item.name, item.tagline+" "+url].map(col).join(separator));
+    const url = `https://devfolio.co/projects/${item.slug}`;
+    output.push([
+      item.name, 
+      item.tagline,
+      item.description[0].content,
+      item.links, 
+      item.cover_img, 
+      item.members.map((m) => m.username).join(","),
+      url, 
+    ].map(col).join(separator));    
   }
 
   return new Response(output.join("\n"), {
