@@ -59,7 +59,7 @@ async function handleRequest(request: Request): Promise<Response> {
   const col = (val) => val ? `"${val.replace(/"/g, '""').replace(/,/g, ',')}"` : '""';
   const separator = ",";
 
-  const output = [["Project Name", "Tagline", "Description", "Links", "Cover img", "Members", "URL"].map(col).join(separator)];
+  const output = [["Project Name", "Tagline", "Description", "Links", "Cover img", "Members", "URL", "Tracks"].map(col).join(separator)];
   const list = data.hits.hits || [];
 
   if (searchParams.get("stats") !== null) {
@@ -79,6 +79,7 @@ async function handleRequest(request: Request): Promise<Response> {
       item.cover_img, 
       item.members.map((m) => m.username).join(","),
       url, 
+      item.tracks.map((m) => m.name).join(","),
     ].map(col).join(separator));    
   }
 
