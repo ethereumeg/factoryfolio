@@ -16,7 +16,7 @@ async function handleRequest(request: Request): Promise<Response> {
             <h1>FactoryFolio</h1>
             <p>Devfolio → FactoryDAO export. The script downloads all projects from a given hackathon and formats them as a CSV ready for import into FactoryDAO.</p>
             <p>
-            CSV file:<i>Project Name, Tagline, Description, Links, Cover img, Members, Project URL</i>
+            CSV file:<i>Project Name, Tagline, Description, Links, Cover img, Members, Project URL, Prize Tracks</i>
             </p>
             <h2>Usage</h2>
             <p>
@@ -59,7 +59,7 @@ async function handleRequest(request: Request): Promise<Response> {
   const col = (val) => val ? `"${val.replace(/"/g, '""').replace(/,/g, ',')}"` : '""';
   const separator = ",";
 
-  const output = [["Project Name", "Tagline", "Description", "Links", "Cover img", "Members", "URL", "Tracks"].map(col).join(separator)];
+  const output = [["Project Name", "Tagline", "Description", "Links", "Cover img", "Members", "URL", "Prize Tracks"].map(col).join(separator)];
   const list = data.hits.hits || [];
 
   if (searchParams.get("stats") !== null) {
@@ -79,7 +79,7 @@ async function handleRequest(request: Request): Promise<Response> {
       item.cover_img, 
       item.members.map((m) => m.username).join(","),
       url, 
-      item.tracks.map((m) => m.name).join(","),
+      item.prize_tracks.map((m) => m.name).join(","),
     ].map(col).join(separator));    
   }
 
