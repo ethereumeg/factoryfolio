@@ -79,7 +79,7 @@ async function handleRequest(request: Request): Promise<Response> {
       item.links, 
       item.hashtags.map((m) => m.name).join(","),
       url, 
-      item.prize_tracks.map((m) => m.name).join(","),
+      item.prize_tracks?.map((m) => m.name).join(","),
     ].map(col).join(separator));    
   }
 
