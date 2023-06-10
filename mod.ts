@@ -52,7 +52,7 @@ async function handleRequest(request: Request): Promise<Response> {
     },
     body: JSON.stringify({
       hackathon_slugs: [hackathonSlug],
-      size: 1000,
+      size: 5000,
     }),
   });
   const data = await req.json();
